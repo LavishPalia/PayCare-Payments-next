@@ -10,12 +10,12 @@ const DoughnutChart = ({ accounts }: DoughnutChartProps) => {
   const data = {
     datasets: [
       {
-        label: "Banks",
-        data: [1250, 2500, 3750],
-        backgroundColor: ["#0747b6", "#2265d8", "#2f91fa"],
+        label: "Amnt",
+        data: [135346.56, 11188.11, 21967, 7277.84],
+        backgroundColor: ["#0747b6", "#2265d8", "#2f91fa", "#0080ff"],
       },
     ],
-    labels: ["Bank 1", "Bank 2", "Bank 3"],
+    labels: ["ICICI", "HDFC", "PNB", "SBI"],
   };
   return (
     <Doughnut
@@ -24,9 +24,9 @@ const DoughnutChart = ({ accounts }: DoughnutChartProps) => {
         cutout: "60%",
         plugins: {
           legend: {
-            display: false
-          }
-        }
+            display: false,
+          },
+        },
       }}
     />
   );
