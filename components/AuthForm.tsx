@@ -11,10 +11,14 @@ import { Form } from "@/components/ui/form";
 import CustomInput from "./CustomInput";
 import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { signIn, signUp } from "@/lib/actions/user.actions";
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
   const [isLaoding, setIsLaoding] = useState(false);
+
+  const router = useRouter();
 
   const formSchema = authFormSchema(type);
 
@@ -28,13 +32,31 @@ const AuthForm = ({ type }: { type: string }) => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLaoding(true);
+    console.log(data);
+    try {
+      if (type === "sign-up") {
+        const newUser = await signUp(data);
 
-    setIsLaoding(false);
-  }
+        setUser(newUser);
+      }
+      if (type === "sign-in") {
+        const response = await signIn({
+          email: data.email,
+          password: data.password,
+        });
+
+        // console.log(response);
+
+        if (response) router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLaoding(false);
+    }
+  };
 
   return (
     <section className="auth-form">
@@ -94,7 +116,13 @@ const AuthForm = ({ type }: { type: string }) => {
                     control={form.control}
                     name="address1"
                     label="Address"
-                    placeholder="Surajgarh, Jhunjhunu"
+                    placeholder="Ward No.4, Anaj Mandi"
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="city"
+                    label="City"
+                    placeholder="Surajgarh"
                   />
                   <div className="flex gap-4">
                     <CustomInput
